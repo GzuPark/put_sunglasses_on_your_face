@@ -35,5 +35,8 @@ python main.py --webcam
 
 ```sh
 python main.py --quaternion
+```
+
+```sh
 python main.py --quaternion --webcam
 ```
