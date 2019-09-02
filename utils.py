@@ -170,3 +170,19 @@ def get_orientation(width, height, landmarks):
     yaw   = -math.degrees(math.asin(math.sin(yaw)))
 
     return int(pitch), int(roll), int(yaw)
+
+
+def rotate_along_axis(img, width, height, theta=0, phi=0, gamma=0, dx=0, dy=0, dz=0):
+    sunglasses = cv2.resize(img, (width, height))
+    rad_theta, rad_phi, rad_gamma = get_radius(theta, phi, gamma)
+
+    # get focal length on z axis
+    dist = np.sqrt(width**2 + height**2)
+    focal = dist / (2 * np.sin(rad_gamma) if np.sin(rad_gamma) != 0 else 1)
+    dz = focal
+
+    # get projection matrix
+    mat = get_perspective_projection_matrix(width, height, focal, rad_theta, rad_phi, rad_gamma, dx, dy, dz)
+    result = cv2.warpPerspective(sunglasses, mat, (width, height))
+
+    return result

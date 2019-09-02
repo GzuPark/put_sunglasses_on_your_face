@@ -9,11 +9,12 @@ import numpy as np
 
 from utils import (
     detect_face,
-    load_assets,
     draw_landmarks,
-    get_radius,
-    get_perspective_projection_matrix,
     get_orientation,
+    get_perspective_projection_matrix,
+    get_radius,
+    load_assets,
+    rotate_along_axis,
 )
 
 
@@ -39,22 +40,6 @@ class PutOn(object):
         result_filename = f"puton_{self.filename}"
         result_filepath = os.path.join(os.getcwd(), "results", result_filename)
         cv2.imwrite(result_filepath, self.img)
-
-
-    def rotate_along_axis(self, width, height, theta=0, phi=0, gamma=0, dx=0, dy=0, dz=0):
-        sunglasses = cv2.resize(self.sunglasses, (width, height))
-        rad_theta, rad_phi, rad_gamma = get_radius(theta, phi, gamma)
-
-        # get focal length on z axis
-        dist = np.sqrt(width**2 + height**2)
-        focal = dist / (2 * np.sin(rad_gamma) if np.sin(rad_gamma) != 0 else 1)
-        dz = focal
-
-        # get projection matrix
-        mat = get_perspective_projection_matrix(width, height, focal, rad_theta, rad_phi, rad_gamma, dx, dy, dz)
-        result = cv2.warpPerspective(sunglasses.copy(), mat, (width, height))
-
-        return result
 
 
     def images(self):
@@ -121,7 +106,7 @@ class PutOn(object):
             if self.args.quaternion:
                 _h, _w, _ = self.img.shape
                 _, roll, yaw = get_orientation(_w, _h, landmarks.parts())
-                sunglasses = self.rotate_along_axis(width, height, phi=yaw, gamma=roll)
+                sunglasses = rotate_along_axis(self.sunglasses, width, height, phi=yaw, gamma=roll)
             else:
                 sunglasses = cv2.resize(self.sunglasses, (width, height))
 
