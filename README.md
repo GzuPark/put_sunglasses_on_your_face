@@ -30,3 +30,10 @@ python main.py --landmarks
 ```sh
 python main.py --webcam
 ```
+
+### Applying quaternion
+
+```sh
+python main.py --quaternion
+python main.py --quaternion --webcam
+```
