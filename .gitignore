@@ -217,3 +217,9 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.gitignore.io/api/linux,macos,python,opencv,windows,visualstudiocode
+
+!.gitkeep
+*.dat
+*.bz2
+results/*.jpg
+results/*.png
