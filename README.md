@@ -16,17 +16,17 @@ This is a python application that combine your face and a sunglasses image with 
 
 ### Load images
 
-```python
+```sh
 python main.py
 ```
 
-```python
+```sh
 # save landmarks
 python main.py --landmarks
 ```
 
 ### Using a webcam
 
-```python
+```sh
 python main.py --webcam
 ```
