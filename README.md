@@ -14,6 +14,19 @@ This is a python application that combine your face and a sunglasses image with 
 
 ## How to use
 
+### Load images
+
 ```python
 python main.py
+```
+
+```python
+# save landmarks
+python main.py --landmarks
+```
+
+### Using a webcam
+
+```python
+python main.py --webcam
 ```
