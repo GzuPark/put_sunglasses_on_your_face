@@ -1,7 +1,6 @@
 import argparse
 import glob
 import os
-import time
 
 import cv2
 import dlib
