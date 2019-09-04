@@ -1,6 +1,9 @@
 # Put Sunglasses on your Face
 
-This is a python application that combine your face and a sunglasses image with OpenCV library.
+This is a python application that combine your face and a sunglasses image with [OpenCV](https://opencv.org/) and [Dlib](http://dlib.net/) library.
+
+- Blogs
+  - Korean: [Computer Vision - 선글라스를 2D 가상 착용해보기](https://gzupark.github.io/blog/Put-Sunglasses-on-your-Face/)
 
 ## Environment
 
@@ -9,8 +12,7 @@ This is a python application that combine your face and a sunglasses image with 
   - `dlib==19.17.0`
   - `opencv-python==4.1.0.25`
 - Download the dlib landmark detector model file and unzip
-  - [download](https://raw.githubusercontent.com/davisking/dlib-models/master/shape_predictor_68_face_landmarks.dat.bz2)
-  - `bzip2 -d ${PATH}/assets/models/shape_predictor_68_face_landmarks.dat.bz2`
+  - `python assets/models/download_dlib_shape_predictor_68.py`
 
 ## How to use
 
@@ -22,21 +24,21 @@ python main.py
 
 ```sh
 # save landmarks
-python main.py --landmarks
+python main.py -l
 ```
 
 ### Using a webcam
 
 ```sh
-python main.py --webcam
+python main.py -w
 ```
 
 ### Applying quaternion
 
 ```sh
-python main.py --quaternion
+python main.py -q
 ```
 
 ```sh
-python main.py --quaternion --webcam
+python main.py -q -w
 ```
