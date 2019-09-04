@@ -56,7 +56,7 @@ class PutOn(object):
         if (cap.isOpened() == False):
             print("Error opening video stream or file.")
         else:
-            print("Press 'ESC' if you want to quit.")
+            print("Press 'Q' if you want to quit.")
 
         while(cap.isOpened()):
             ret, self.img = cap.read()
@@ -65,7 +65,7 @@ class PutOn(object):
                 self.run()
                 cv2.imshow("Put on the sunglasses on your face", self.img)
 
-                if cv2.waitKey(1) == 27:
+                if cv2.waitKey(1) & 0xFF == ord('q'):
                     break
             else:
                 break
@@ -99,8 +99,8 @@ class PutOn(object):
             scale = width / self.sun_w
             height = int(self.sun_h * scale)
 
-            move_x = -int(self.points[1] * scale)
-            move_y = -int(self.points[2] * scale)
+            move_x = int(self.points[1] * scale)
+            move_y = int(self.points[2] * scale)
 
             if self.args.quaternion:
                 _h, _w, _ = self.img.shape
@@ -110,7 +110,7 @@ class PutOn(object):
                 sunglasses = cv2.resize(self.sunglasses, (width, height))
 
             # get region of interest on the face to change
-            roi_color = self.img[(y + move_y):(y + height + move_y), (x + move_x):(x + width + move_x)]
+            roi_color = self.img[(y - move_y):(y + height - move_y), (x - move_x):(x + width - move_x)]
 
             # find all non-transparent points
             index = np.argwhere(sunglasses[:,:,3] > 0)
@@ -119,7 +119,7 @@ class PutOn(object):
                 roi_color[index[:,0], index[:,1], j] = sunglasses[index[:,0], index[:,1], j]
 
             # set the area of the image of the changed region with sunglasses
-            self.img[(y + move_y):(y + height + move_y), (x + move_x):(x + width + move_x)] = roi_color
+            self.img[(y - move_y):(y + height - move_y), (x - move_x):(x + width - move_x)] = roi_color
 
             if not self.args.webcam:
                 self.save_result()
@@ -127,11 +127,11 @@ class PutOn(object):
 
 def get_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--model", type=str, default="shape_predictor_68_face_landmarks.dat", help="dlib face landmarks detector model.")
-    parser.add_argument("--image", type=str, default="example1", help="sunglasses image file name (without extension).")
-    parser.add_argument("--landmarks", action="store_true", help="save landmarks with source images.")
-    parser.add_argument("--webcam", action="store_true", help="put on a sunglasses on real-time.")
-    parser.add_argument("--quaternion", action="store_true", help="apply quaternion to a sunglasses image.")
+    parser.add_argument("-m", "--model", type=str, default="shape_predictor_68_face_landmarks.dat", help="dlib face landmarks detector model.")
+    parser.add_argument("-i", "--image", type=str, default="example1", help="sunglasses image file name (without extension).")
+    parser.add_argument("-l", "--landmarks", action="store_true", help="save landmarks with source images.")
+    parser.add_argument("-w", "--webcam", action="store_true", help="put on a sunglasses on real-time.")
+    parser.add_argument("-q", "--quaternion", action="store_true", help="apply quaternion to a sunglasses image.")
 
     args = parser.parse_args()
 
