@@ -7,7 +7,7 @@ This is a python application that combine your face and a sunglasses image with 
 
 ## Environment
 
-- `Python ~= 3.6`
+- `Python >= 3.6`
   - `numpy==1.17.1`
   - `dlib==19.17.0`
   - `opencv-python==4.1.0.25`
