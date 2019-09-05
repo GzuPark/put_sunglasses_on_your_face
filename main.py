@@ -10,8 +10,6 @@ from utils import (
     detect_face,
     draw_landmarks,
     get_orientation,
-    get_perspective_projection_matrix,
-    get_radius,
     load_assets,
     rotate_along_axis,
 )
@@ -25,7 +23,6 @@ class PutOn(object):
 
         self.sun_h, self.sun_w, _ = self.sunglasses.shape
 
-
     def save_landmarks(self, landmarks):
         img_copy = self.img.copy()
         draw_landmarks(img_copy, landmarks)
@@ -34,12 +31,10 @@ class PutOn(object):
         landmarks_filepath = os.path.join(os.getcwd(), "results", landmarks_filename)
         cv2.imwrite(landmarks_filepath, img_copy)
 
-
     def save_result(self):
         result_filename = f"puton_{self.filename}"
         result_filepath = os.path.join(os.getcwd(), "results", result_filename)
         cv2.imwrite(result_filepath, self.img)
-
 
     def images(self):
         faces_path = os.path.join(os.getcwd(), "assets", "images", "faces", "*.jpg")
@@ -49,11 +44,10 @@ class PutOn(object):
             self.img = cv2.imread(img_path)
             self.run()
 
-
     def webcam(self):
         cap = cv2.VideoCapture(0)
 
-        if (cap.isOpened() == False):
+        if (cap.isOpened() is False):
             print("Error opening video stream or file.")
         else:
             print("Press 'Q' if you want to quit.")
@@ -61,7 +55,7 @@ class PutOn(object):
         while(cap.isOpened()):
             ret, self.img = cap.read()
 
-            if ret == True:
+            if ret is True:
                 self.run()
                 cv2.imshow("Put on the sunglasses on your face", self.img)
 
@@ -69,7 +63,6 @@ class PutOn(object):
                     break
             else:
                 break
-
 
     def run(self):
         img_rgb = cv2.cvtColor(self.img, cv2.COLOR_BGR2RGB)
@@ -84,7 +77,7 @@ class PutOn(object):
                             int(face_rectangles[i].bottom()),
                         )
             landmarks = self.detector_landmarks(img_rgb, rect)
-            
+
             if self.args.landmarks and (not self.args.webcam):
                 self.save_landmarks(landmarks)
 
@@ -113,10 +106,10 @@ class PutOn(object):
             roi_color = self.img[(y - move_y):(y + height - move_y), (x - move_x):(x + width - move_x)]
 
             # find all non-transparent points
-            index = np.argwhere(sunglasses[:,:,3] > 0)
+            index = np.argwhere(sunglasses[:, :, 3] > 0)
 
             for j in range(3):
-                roi_color[index[:,0], index[:,1], j] = sunglasses[index[:,0], index[:,1], j]
+                roi_color[index[:, 0], index[:, 1], j] = sunglasses[index[:, 0], index[:, 1], j]
 
             # set the area of the image of the changed region with sunglasses
             self.img[(y - move_y):(y + height - move_y), (x - move_x):(x + width - move_x)] = roi_color
@@ -127,7 +120,7 @@ class PutOn(object):
 
 def get_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("-m", "--model", type=str, default="shape_predictor_68_face_landmarks.dat", help="dlib face landmarks detector model.")
+    parser.add_argument("-m", "--model", type=str, default="shape_predictor_68_face_landmarks.dat", help="dlib landmarks.")
     parser.add_argument("-i", "--image", type=str, default="example1", help="sunglasses image file name (without extension).")
     parser.add_argument("-l", "--landmarks", action="store_true", help="save landmarks with source images.")
     parser.add_argument("-w", "--webcam", action="store_true", help="put on a sunglasses on real-time.")
@@ -144,7 +137,7 @@ def main():
         raise TypeError("Webcam does not support save landmarks.")
 
     puton = PutOn(args)
-    
+
     if args.webcam:
         puton.webcam()
     else:
