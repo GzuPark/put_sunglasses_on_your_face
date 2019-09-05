@@ -18,6 +18,7 @@ def main():
     open(filepath, "wb").write(data)
     print(f"Decompressed: {filename}")
 
+    os.chmod(f"{filepath}.bz2", 0o777)
     os.remove(f"{filepath}.bz2")
 
 
