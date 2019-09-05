@@ -14,12 +14,12 @@ def test_puton_saved_images(get_args):
     dst_path = os.path.abspath(os.path.join(realpath, "..", "data"))
 
     sources = []
-    sources.append( os.path.join(src_path, "landmarks_center.jpg") )
-    sources.append( os.path.join(src_path, "puton_center.jpg") )
+    sources.append(os.path.join(src_path, "landmarks_center.jpg"))
+    sources.append(os.path.join(src_path, "puton_center.jpg"))
 
     targets = []
-    targets.append( os.path.join(dst_path, "landmarks_center.jpg") )
-    targets.append( os.path.join(dst_path, "puton_center.jpg") )
+    targets.append(os.path.join(dst_path, "landmarks_center.jpg"))
+    targets.append(os.path.join(dst_path, "puton_center.jpg"))
 
     for src, tar in zip(sources, targets):
         with open(src, "rb") as img:
@@ -43,10 +43,10 @@ def test_puton_saved_quaternion_images(get_args):
     dst_path = os.path.abspath(os.path.join(realpath, "..", "data"))
 
     sources = []
-    sources.append( os.path.join(src_path, "puton_soft_right.jpg") )
+    sources.append(os.path.join(src_path, "puton_soft_right.jpg"))
 
     targets = []
-    targets.append( os.path.join(dst_path, "puton_soft_right.jpg") )
+    targets.append(os.path.join(dst_path, "puton_soft_right.jpg"))
 
     for src, tar in zip(sources, targets):
         with open(src, "rb") as img:
