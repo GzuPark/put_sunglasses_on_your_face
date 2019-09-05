@@ -41,7 +41,7 @@ def degree_to_radius(degree):
 
 def get_radius(theta, phi, gamma):
     rad_theta = degree_to_radius(theta)
-    rad_phi   = degree_to_radius(phi)
+    rad_phi = degree_to_radius(phi)
     rad_gamma = degree_to_radius(gamma)
 
     return rad_theta, rad_phi, rad_gamma
@@ -121,7 +121,7 @@ def get_orientation(width, height, landmarks):
             (landmarks[45].x, landmarks[45].y),     # right eye right corner
             (landmarks[48].x, landmarks[48].y),     # left mouth corner
             (landmarks[54].x, landmarks[54].y)      # right mouth corner
-        ], 
+        ],
         dtype="double",
     )
 
@@ -144,30 +144,22 @@ def get_orientation(width, height, landmarks):
             [0, focal_length, center[1]],
             [0, 0, 1]
         ],
-        dtype = "double",
+        dtype="double",
     )
 
     dist_coeffs = np.zeros((4, 1))
-    _, rotation_vector, translation_vector = cv2.solvePnP(model_points, image_points, camera_matrix, dist_coeffs, flags=cv2.SOLVEPNP_ITERATIVE)
+    _, r_vec, trans_vec = cv2.solvePnP(model_points, image_points, camera_matrix, dist_coeffs, flags=cv2.SOLVEPNP_ITERATIVE)
 
-    axis = np.float32(
-        [
-            [500, 0, 0],
-            [0, 500, 0],
-            [0, 0, 500],
-        ]
-    )
-    
-    r_vector_matrix = cv2.Rodrigues(rotation_vector)[0]
+    r_vector_matrix = cv2.Rodrigues(r_vec)[0]
 
-    project_matrix = np.hstack((r_vector_matrix, translation_vector))
-    euler_angles   = cv2.decomposeProjectionMatrix(project_matrix)[6]
+    project_matrix = np.hstack((r_vector_matrix, trans_vec))
+    euler_angles = cv2.decomposeProjectionMatrix(project_matrix)[6]
 
     pitch, yaw, roll = [math.radians(_) for _ in euler_angles]
 
-    pitch =  math.degrees(math.asin(math.sin(pitch)))
-    roll  =  math.degrees(math.asin(math.sin(roll)))
-    yaw   = -math.degrees(math.asin(math.sin(yaw)))
+    pitch = math.degrees(math.asin(math.sin(pitch)))
+    roll = math.degrees(math.asin(math.sin(roll)))
+    yaw = -math.degrees(math.asin(math.sin(yaw)))
 
     return int(pitch), int(roll), int(yaw)
 
