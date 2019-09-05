@@ -18,7 +18,8 @@ def main():
     open(filepath, "wb").write(data)
     print(f"Decompressed: {filename}")
 
-    os.remove(f"{filepath}.bz2")
+    if os.name == "posix":
+        os.remove(f"{filepath}.bz2")
 
 
 if __name__ == "__main__":
